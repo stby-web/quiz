@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>Spájačka - Rímske pamiatky</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f0f0f0;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 40px;
+    }
+    .row {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    .image, .label {
+      border: 2px solid #333;
+      background-color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 10px;
+      width: 220px;
+    }
+    .image img {
+      max-width: 200px;
+      border-radius: 8px;
+    }
+    .label {
+      font-size: 18px;
+      font-weight: bold;
+      padding: 15px;
+    }
+    button {
+      margin-top: 30px;
+      padding: 12px 24px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    #result {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Spájačka: Priraď obrázok k názvu</h1>
+
+  <div class="row images">
+    <div class="image" data-image="Koloseum"><img src="koloseum.jpg" alt="Koloseum"></div>
+    <div class="image" data-image="Via Appia"><img src="via_appia.jpg" alt="Via Appia"></div>
+    <div class="image" data-image="Rímske akvadukty"><img src="akvadukt.jpg" alt="Akvadukt"></div>
+    <div class="image" data-image="Forum Romanum"><img src="forum_romanum.jpg" alt="Forum Romanum"></div>
+  </div>
+
+  <div class="row labels">
+    <div class="label" data-label="A" data-name="Forum Romanum">A) Forum Romanum</div>
+    <div class="label" data-label="B" data-name="Rímske akvadukty">B) Rímske akvadukty</div>
+    <div class="label" data-label="C" data-name="Koloseum">C) Koloseum</div>
+    <div class="label" data-label="D" data-name="Via Appia">D) Via Appia</div>
+  </div>
+
+  <button onclick="vyhodnot()">Vyhodnotiť</button>
+  <div id="result"></div>
+
+  <script>
+    let selectedImage = null;
+
+    document.querySelectorAll(".image").forEach(image => {
+      image.addEventListener("click", () => {
+        if (!image.hasAttribute("data-linked")) {
+          selectedImage = image;
+        }
+      });
+    });
+
+    document.querySelectorAll(".label").forEach(label => {
+      label.addEventListener("click", () => {
+        if (selectedImage && !label.hasAttribute("data-linked")) {
+          selectedImage.setAttribute("data-match", label.getAttribute("data-name"));
+          selectedImage.setAttribute("data-linked", "true");
+          label.setAttribute("data-linked", "true");
+          selectedImage.style.backgroundColor = "#d0ffd0";
+          label.style.backgroundColor = "#d0ffd0";
+          selectedImage = null;
+        }
+      });
+    });
+
+    function vyhodnot() {
+      let spravne = 0;
+      document.querySelectorAll(".image").forEach(image => {
+        if (image.getAttribute("data-match") === image.getAttribute("data-image")) {
+          spravne++;
+        }
+      });
+      document.getElementById("result").textContent = `Správne odpovede: ${spravne} z 4`;
+    }
+  </script>
+</body>
+</html>
